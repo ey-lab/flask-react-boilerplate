@@ -19,9 +19,11 @@ import {
   routerMiddleware, 
   routerReducer as routing,
 } from 'react-router-redux';
+import { reducer as form } from 'redux-form';
 
 import HomeIcon from 'material-ui/svg-icons/action/home';
 
+import Login from './containers/Login/Login';
 import Layout from './containers/Layout/Layout';
 import Menu from './containers/Layout/Menu';
 import Home from './containers/Home/Home';
@@ -32,10 +34,12 @@ import ui from './reducers';
 const reducer = combineReducers({
   ui,
   routing,
+  form,
 });
 
 const store = createStore(
   reducer, 
+  undefined,
   compose(
   applyMiddleware(routerMiddleware(browserHistory)),
   window.devToolsExtension ? window.devToolsExtension() : f => f, 
@@ -55,8 +59,7 @@ const MenuComponent = () => (
   <Menu items={menuItems} />
 );
 
-const LayoutComponent = (props) => {
-  const { children } = props;
+const LayoutComponent = ({children}) => {
   return (
     <Layout 
       title='EY App'
@@ -71,9 +74,14 @@ const App = () => {
   return (
     <Provider store={store}>
       <Router history={history}>
-        <Route path="/" component={LayoutComponent}>
-          <IndexRoute component={Home} />
-          <Route path="*" component={NotFound} />
+        <Route path="/" >
+          <Route path="auth">
+            <Route path="login" component={Login} />
+          </Route>
+          <Route component={LayoutComponent}>
+            <IndexRoute component={Home} />
+            <Route path="*" component={NotFound} />
+          </Route>
         </Route>
       </Router>
     </Provider>

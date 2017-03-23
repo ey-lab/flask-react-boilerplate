@@ -7,7 +7,7 @@ import autoprefixer from 'material-ui/utils/autoprefixer';
 
 import AppBar from './AppBar';
 import SideBar from './SideBar';
-import defaultTheme from './defaultTheme';
+import defaultTheme from '../defaultTheme';
 
 injectTapEventPlugin();
 
@@ -16,25 +16,21 @@ const styles = {
     display: 'flex',
     flexDirection: 'column', 
   },
-
   main: {
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100vh',
   },
-
   body: {
     backgroundColor: '#edecec',
     display: 'flex',
     flex: 1,
     overflow: 'hidden',
   },
-
   content: {
     flex: 1,
     padding: '1em',
   },
-
 };
 
 const prefixedStyles = {};

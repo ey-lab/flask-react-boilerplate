@@ -1,7 +1,11 @@
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
+import { 
+  connect 
+} from 'react-redux';
 import MuiAppBar from 'material-ui/AppBar';
-import { toggleSidebar as toggleSidebarAction } from '../../actions';
+import { 
+  toggleSidebar as toggleSidebarAction 
+} from '../../actions';
 
 const AppBar = ({ title, toggleSidebar }) => (
   <MuiAppBar

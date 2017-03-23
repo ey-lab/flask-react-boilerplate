@@ -1,6 +1,11 @@
 import React from 'react'
 
-import { Card, CardTitle, CardHeader, CardText } from 'material-ui/Card';
+import { 
+  Card, 
+  CardTitle, 
+  CardHeader, 
+  CardText
+} from 'material-ui/Card';
 import Paper from 'material-ui/Paper'
 import Avatar from 'material-ui/Avatar'
 
