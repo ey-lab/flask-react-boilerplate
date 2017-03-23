@@ -1,4 +1,7 @@
 import React, { PropTypes } from 'react';
+import {
+  Link,
+} from 'react-router';
 
 import MenuItem from 'material-ui/MenuItem';
 
@@ -11,14 +14,15 @@ const styles = {
   }
 }
 
-const Menu = ({screens}) => (
+const Menu = ({items}) => (
   <div style={styles.main}>
   {
-    screens.map(screen => (
+    items.map(item => (
       <MenuItem 
-        key={screen.name}
-        primaryText={screen.name}
-        leftIcon={<screen.icon />}
+        key={item.name}
+        primaryText={item.name}
+        leftIcon={<item.icon />}
+        containerElement={<Link to={item.path} />}
       />
     )
   )}
@@ -26,7 +30,7 @@ const Menu = ({screens}) => (
 )
 
 Menu.propTypes = {
-  screens: PropTypes.array.isRequired,
+  items: PropTypes.array.isRequired,
 }
 
 export default Menu;

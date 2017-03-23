@@ -56,7 +56,7 @@ const Layout = (props) => {
     prefixedStyles.body = prefix(styles.body);
     prefixedStyles.content = prefix(styles.content);
   }
-
+  
   return (
     <MuiThemeProvider muiTheme={muiTheme}>
       <div style={prefixedStyles.wrapper}>
