@@ -23,14 +23,14 @@ const NotFound = (props) => {
       <Card>
         <CardTitle 
           title="Oups..." 
-          subtitle="Error 4040 : Not Found"/>
+          subtitle="Error 404 : Not Found"/>
         <CardText>
           The page <strong>{window.location.href}</strong> could not be found. 
         </CardText>
         <CardActions>
           <RaisedButton
             label="Take me home"
-            primary={true}
+            primary
             onClick={() => dispatch(push('/'))}
           />
         </CardActions>
@@ -42,6 +42,6 @@ const NotFound = (props) => {
 export default connect(
   state => {},
   dispatch => ({
-    dispatch
+    dispatch,
   })
 )(NotFound);

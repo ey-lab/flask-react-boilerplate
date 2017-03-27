@@ -13,7 +13,7 @@ import {
   white
 } from 'material-ui/styles/colors';
 
-import logo from "./logo.svg"
+import logo from './logo.svg';
 
 const Home = () => {
   return (

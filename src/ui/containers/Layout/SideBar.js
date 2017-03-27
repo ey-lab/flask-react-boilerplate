@@ -1,6 +1,10 @@
-import React, { PropTypes } from 'react';
+import React, { 
+  PropTypes, 
+} from 'react';
 import Paper from 'material-ui/Paper';
-import { connect } from 'react-redux';
+import { 
+  connect, 
+} from 'react-redux';
 
 const styles = {
   sidebarOpen: {
@@ -11,7 +15,7 @@ const styles = {
   },
   sidebarClosed: {
     flex: '0 0 12em',
-    marginLeft: '-12em',
+    marginLeft: '-8.5em',
     order: -1,
     transition: 'margin 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
@@ -28,13 +32,11 @@ const SideBar = (props) => {
 
 SideBar.propTypes = {
   open: PropTypes.bool,
+  children: PropTypes.node,
 }
 
-const mapStateToProps = (state, props) => ({
-  open: state.ui.sidebarOpen,
-})
-
 export default connect(
-  mapStateToProps,
-  {}
+  state => ({
+    open: state.ui.sidebarOpen,
+  })
 )(SideBar);
