@@ -10,7 +10,7 @@ from werkzeug.datastructures import MultiDict
 from werkzeug.exceptions import BadRequest, Unauthorized
 from werkzeug.wrappers import Response
 
-from user import _commit
+from ..user import _commit
 
 # Convenient constants
 WEBSITE_DOMAIN = 'http://localhost:3000'

@@ -1,8 +1,8 @@
 from flask_security import RoleMixin, UserMixin
 
-from extensions import db
-from common.constants import STRING_LENGTH
-from user.constants import ROLE_TABLE_NAME, ROLE_NAME_LENGTH, \
+from ..extensions import db
+from ..common.constants import STRING_LENGTH
+from ..user.constants import ROLE_TABLE_NAME, ROLE_NAME_LENGTH, \
     USER_TABLE_NAME, USER_EMAIL_LENGTH, USER_PASSWORD_LENGTH, \
     USER_LAST_NAME_LENGTH, USER_FIRST_NAME_LENGTH, USER_USER_NAME_LENGTH, \
     SEX_TYPES, SEX_OTHER, USER_STATUS, STATUS_NEW

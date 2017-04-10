@@ -1,6 +1,6 @@
 from flask_security import SQLAlchemyUserDatastore
 
-from models import User, Role, db
+from .models import User, Role, db
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 

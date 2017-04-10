@@ -1,5 +1,5 @@
-from app import create_app, db
-from user import user_datastore
+from flask_api.app import create_app, db
+from flask_api.user import user_datastore
 
 from flask_security.utils import encrypt_password
 

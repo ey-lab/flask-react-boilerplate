@@ -1,8 +1,8 @@
 from flask import Flask
 
 from config import set_config
-from extensions import db, security, socketio, csrf
-from user import user_datastore
+from .extensions import db, security, socketio, csrf
+from .user import user_datastore
 
 __all__ = [
     'create_app',
@@ -34,7 +34,7 @@ def configure_extensions(app):
         socketio.init_app(app, async_mode=app.config['FLASK_SOCKETIO_ASYNC_MODE'])
 
 def configure_blueprints(app):
-    from ressources import auth_bp
+    from .ressources import auth_bp
     for bp in [auth_bp]:
         app.register_blueprint(bp)
 
