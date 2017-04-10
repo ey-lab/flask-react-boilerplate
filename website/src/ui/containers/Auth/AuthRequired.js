@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React, { 
+  PropTypes 
+} from 'react';
 import { 
   connect,
 } from 'react-redux';
@@ -11,11 +13,11 @@ class AuthRequired extends React.Component {
     auth: PropTypes.object.isRequired,
   } 
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      (this.props.auth.user && !(nextProps.auth.user)) || (nextProps.auth.user && !(this.props.auth.user))
-    );
-  };
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return (
+  //     (this.props.auth.user && !(nextProps.auth.user)) || (nextProps.auth.user && !(this.props.auth.user))
+  //   );
+  // };
 
   render() {
     const {children, auth: {user}} = this.props;

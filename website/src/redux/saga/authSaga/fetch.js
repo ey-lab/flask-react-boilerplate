@@ -37,6 +37,7 @@ const fetch = (apiClient) => {
             fetchUrl: url, 
             requestPayload: payload, 
             fetchStatus: FETCH_SUCCESS,
+            csrfToken: response.csrfToken,
           },
         }),
       ];
@@ -52,7 +53,8 @@ const fetch = (apiClient) => {
             ...meta, 
             fetchUrl: url, 
             requestPayload: payload, 
-            fetchStatus: FETCH_ERROR, 
+            fetchStatus: FETCH_ERROR,
+            csrfToken: error.csrfToken, 
           },
         }),
       ];

@@ -9,7 +9,7 @@ import {
 } from '../../actions';
 import {
   GET,
-  LOAD_AUTH_URL,
+  LOAD_AUTH_RESOURCE,
 } from '../../../apiClient';
 
 /**
@@ -27,15 +27,15 @@ const loadAuth = (apiClient) => {
     let completed;
     try {
       /* Run the API call (this call is blocking => waits until a response/error has been received) */      
-      const user = yield call(apiClient, GET, LOAD_AUTH_URL)
-      
+      const response = yield call(apiClient, GET, LOAD_AUTH_RESOURCE)
       /* On API call success, dispatch a succes action with success information */            
       yield [
         put({
           type: `${LOAD_AUTH}_SUCCESS`, 
-          payload: user,
+          payload: response.user,
           meta: {
-            date: Date.now()
+            date: Date.now(),
+            csrfToken: response.csrfToken,
           },
         }),
       ];    
@@ -48,7 +48,8 @@ const loadAuth = (apiClient) => {
           payload: error,
           error: true,
           meta: {
-            date: Date.now()
+            date: Date.now(),
+            csrfToken: error.message && error.message.csrfToken,
           }
         }),
       ];
@@ -60,7 +61,7 @@ const loadAuth = (apiClient) => {
           yield put({
             type: `${LOAD_AUTH}_CANCEL`, 
             meta: {
-              date: Date.now()
+              date: Date.now(),
             },
           });
         }

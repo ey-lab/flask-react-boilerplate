@@ -1,6 +1,9 @@
 import React, { 
   PropTypes 
 } from 'react';
+import {
+  connect,
+} from 'react-redux';
 import { 
   propTypes, 
   reduxForm, 
@@ -9,6 +12,7 @@ import {
 import {
   login,
 } from '../../../redux/actions';
+import compose from 'recompose/compose';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import autoprefixer from 'material-ui/utils/autoprefixer';
@@ -56,7 +60,7 @@ const prefixedStyles = {};
 
 const Login = (props) => {
   const { handleSubmit, onSubmit, submitting, theme } = props;
-
+  console.log('Login csrfToken :', props.csrfToken);
   const muiTheme = getMuiTheme(theme); 
   if (!prefixedStyles.main) {
     const prefix = autoprefixer(muiTheme);
@@ -78,10 +82,10 @@ const Login = (props) => {
           <div style={prefixedStyles.form}>
             <div style={prefixedStyles.input}>
               <Field
-                name="emailAddress"
+                name="email"
                 component={TextInput}
                 type="text"
-                floatingLabelText="Email Address"
+                floatingLabelText="Email"
                 disabled={submitting}
               />
             </div>
@@ -114,15 +118,26 @@ const Login = (props) => {
 Login.propTypes = {
   ...propTypes,
   theme: PropTypes.object.isRequired,
-
+  csrfToken: PropTypes.string,
 }
 
 Login.defaultProps = {
   theme: defaultTheme,
 }
 
-export default reduxForm({
+const enhance = compose(
+  connect(
+    state => ({
+      csrfToken: state.auth.csrfToken,
+    })
+  ),
+  reduxForm({
     form: "login",
-    onSubmit: (values, dispatch, props) => dispatch(login(values, "login")),
-})(Login);
+    onSubmit: (values, dispatch, props) => {
+      console.log("Props", props)
+      dispatch(login(values, props.form, props.csrfToken))
+    },
+  })
+)
+export default enhance(Login);
 

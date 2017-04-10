@@ -22,6 +22,10 @@ import {
   LOGOUT,
   FETCH_ERROR,
 } from '../../actions';
+import {
+  HOME_ROUTE,
+  AUTH_LOGIN_ROUTE,
+} from '../../../constants';
 
 function createAuthSaga(apiClient) {
 
@@ -32,24 +36,30 @@ function createAuthSaga(apiClient) {
 
   function* authSaga() {
     while (true) {
-      /* Make an API call to load user authentification (note the call is non blocking) */
+      /* Make an API call to load user authentification  */
       yield fork(handleLoadAuth);
 
       /* Waits for outcome from the authentification loading task */
       const authTaskOutcomeAction = yield take([`${LOAD_AUTH}_FAILURE`, `${LOAD_AUTH}_SUCCESS`]);
 
-      /* If Authentification loading failed then waits for a correctly completed log in */
-      if (authTaskOutcomeAction.type === `${LOAD_AUTH}_FAILURE`) {       
-        yield put(push(`/auth/login`));
-        let isLoggedIn;
-        while (!isLoggedIn) {
-          const action = yield take(LOGIN);
-          yield fork(handleLogin, action);
-          const loginTaskOutcomeAction = yield take([`${LOGIN}_FAILURE`, `${LOGIN}_SUCCESS`]);
-          isLoggedIn = (loginTaskOutcomeAction.type === `${LOGIN}_SUCCESS`);
+      
+      if (authTaskOutcomeAction.type === `${LOAD_AUTH}_FAILURE`) {    
+        /* If Authentification loading failed then user is redirected to the login page */   
+        yield put(push(AUTH_LOGIN_ROUTE));
+
+        function* loginCycle() {
+          yield takeLatest(LOGIN, handleLogin);
         }
+        /**
+         * Starts a race that accepts LOGIN requests and finishes when a succesful login action is dispatched to the server
+         */
+        yield race({
+          loginCycle: call(loginCycle),
+          loginSuccess: take(`${LOGIN}_SUCCESS`),
+        });
       }
-      yield put(push('/'));
+
+      yield put(push(HOME_ROUTE));
       
       /**
        * Reaching this point means user is correctly logged in.
@@ -79,12 +89,11 @@ function createAuthSaga(apiClient) {
         logoutSuccess: take(`${LOGOUT}_SUCCESS`),    
         loadAuthFailure: take(action => (action.type === `${LOAD_AUTH}_FAILURE` && action.payload.status === 401)),     
         fetchAuthFailure: take(action => (action.type === FETCH_ERROR && action.payload.status === 401)),
-        loadAuth: call(loadAuthCycle),
-        logout: call(logoutCycle),
-        fetch: call(fetchCycle),
+        loadAuthCycle: call(loadAuthCycle),
+        logoutCycle: call(logoutCycle),
+        fetchCycle: call(fetchCycle),
       });
 
-      yield put({type: 'RACE_OVER'});
       /* Come back to the beginning of the loop */
     }
   };

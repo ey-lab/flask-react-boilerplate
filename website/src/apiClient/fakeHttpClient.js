@@ -2,10 +2,10 @@ import {
   SubmissionError
 } from 'redux-form';
 import {
-  LOAD_AUTH_URL,
-  LOGIN_URL,
-  LOGOUT_URL,
-} from './urls';
+  LOAD_AUTH_RESOURCE,
+  LOGIN_RESOURCE,
+  LOGOUT_RESOURCE,
+} from './resources';
 import HttpError from './HttpError';
 
 const fakeHttpClient = () => {
@@ -27,7 +27,7 @@ const fakeHttpClient = () => {
 
   const fetch = (url, options = {}) => {
     switch (url) {
-      case `/${LOAD_AUTH_URL}`:
+      case `/${LOAD_AUTH_RESOURCE}`:
         return latency(2000).then(
           response => {
             if (userConnected) {
@@ -38,7 +38,7 @@ const fakeHttpClient = () => {
           }
         );
       
-      case `/${LOGIN_URL}`:
+      case `/${LOGIN_RESOURCE}`:
         return latency(500).then(
           response => {
             const values = JSON.parse(options.body);
@@ -60,7 +60,7 @@ const fakeHttpClient = () => {
           }
         );
       
-      case `/${LOGOUT_URL}`:
+      case `/${LOGOUT_RESOURCE}`:
         return latency(2000).then(
           response => {
             userConnected = null;

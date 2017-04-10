@@ -8,7 +8,7 @@ import {
   LOGOUT,
 } from '../../actions';
 import {
-  LOGOUT_URL,
+  LOGOUT_RESOURCE,
   GET,
 } from '../../../apiClient';
 
@@ -32,7 +32,7 @@ const Logout = (apiClient) => {
     /* Dispatch action to the store to signal that a LOGOUT API call has started */
     try {
       /* Run the API call (note that this call is blocking => waits until a response/error has been received) */      
-      yield call(apiClient, GET, LOGOUT_URL);
+      yield call(apiClient, GET, LOGOUT_RESOURCE);
 
       /* On API call success, dispatch a succes action with success information */            
       yield [
@@ -56,7 +56,7 @@ const Logout = (apiClient) => {
           }
         }),
       ];
-      completed=true;
+      completed = true;
     } finally {
       /* In case the saga is cancelled before terminating  */                        
       if (!completed) {
@@ -64,7 +64,7 @@ const Logout = (apiClient) => {
           yield put({
             type: `${LOGOUT}_CANCEL`, 
             meta: {
-              date: Date.now()
+              date: Date.now(),
             },
           });
         }

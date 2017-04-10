@@ -1,8 +1,8 @@
-import apiClient from './apiClient';
+import apiClient from './apiClient'; // eslint-disable-next-line 
 import fakeHttpClient from './fakeHttpClient';
 import HttpClient from './HttpClient';
 
-export * from './urls';
+export * from './resources';
 export * from './apiClient';
 
-export default apiClient('', new fakeHttpClient());
+export default apiClient('http://localhost:5000', HttpClient);

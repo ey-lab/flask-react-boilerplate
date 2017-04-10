@@ -169,6 +169,20 @@ const logoutStatusReducer = (state = null, action) => {
   }
 };
 
+/* Reducer responsible for csrf token management */
+const csrfTokenReducer = (state = null, action) => {
+  switch (action.type) {
+    case `${LOAD_AUTH}_SUCCESS`:
+      return action.meta.csrfToken;
+
+    case `${LOAD_AUTH}_FAILURE`:
+      return action.meta.csrfToken ? action.meta.csrfToken : state;
+
+    default:
+      return state;
+  }
+};
+
 /* Combine all reducers into the auth reducers */
 export default combineReducers({
   user: userReducer,
@@ -177,4 +191,5 @@ export default combineReducers({
     login: loginStatusReducer,
     logout: logoutStatusReducer,
   }),
+  csrfToken: csrfTokenReducer,  
 });

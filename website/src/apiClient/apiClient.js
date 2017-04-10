@@ -59,6 +59,10 @@ const apiClient = (apiURL, httpClient) => {
         throw new Error(`Unsupported fetch action type ${type}`);
     }
 
+    if (params && params.csrfToken) {
+      options.csrfToken = params.csrfToken
+    }
+
     return {url, options};
   };
 
@@ -76,9 +80,20 @@ const apiClient = (apiURL, httpClient) => {
     }
   };
 
+  const handleError = (error, type, resource, params) => {
+    switch (type) {
+      default:
+        return Promise.reject(error);
+    }
+  };
+
   return (type, resource, params) => {
     const {url, options} = buildRequest(type, resource, params);
-    return httpClient(url, options).then(response => handleResponse(response, type, resource, params))
+    return httpClient(url, options)
+    .then(
+      response => handleResponse(response, type, resource, params),
+      error => handleError(error, type, resource, params)
+    );
   }
 };
 

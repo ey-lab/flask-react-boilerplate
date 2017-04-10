@@ -40,7 +40,7 @@ const NotFound = (props) => {
 };
 
 export default connect(
-  state => {},
+  null,
   dispatch => ({
     dispatch,
   })

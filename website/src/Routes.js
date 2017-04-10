@@ -17,11 +17,21 @@ import {
   AuthRequired,
   UnauthRequired,
 } from './ui/containers/Auth';
+import {
+  HOME_ROUTE,
+  AUTH,
+  LOGIN,
+} from './constants';
 
 const menuItems = [
   {
     name: "Home",
-    path: "/",
+    path: HOME_ROUTE,
+    icon: HomeIcon,
+  },
+  {
+    name: "Nowere",
+    path: '/nowhere',
     icon: HomeIcon,
   },
 ];
@@ -44,9 +54,9 @@ const LayoutComponent = ({children}) => {
 const getRoutes = () => {
   return (
     <Route component={Wrapper}>
-      <Route path="/" >
-        <Route path="auth" component={UnauthRequired}>
-          <Route path="login" component={Login} />
+      <Route path={HOME_ROUTE} >
+        <Route path={AUTH} component={UnauthRequired}>
+          <Route path={LOGIN} component={Login} />
         </Route>
         <Route component={AuthRequired}>
           <Route component={LayoutComponent}>

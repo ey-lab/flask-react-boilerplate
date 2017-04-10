@@ -20,11 +20,12 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 
 /* Login action creator  */
-export const login = (values, formName) => ({
+export const login = (values, formName, csrfToken) => ({
   type: LOGIN,
   payload: values,
   meta: {
-    formName
+    formName,
+    csrfToken,
   },
 })
 

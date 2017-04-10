@@ -13,7 +13,7 @@ import {
   LOGIN,
 } from '../../actions'
 import {
-  LOGIN_URL,
+  LOGIN_RESOURCE,
   POST,
 } from '../../../apiClient';
 
@@ -27,8 +27,7 @@ const login = (apiClient) => {
    * @param {object} action LOGIN action
    */
   function* handleLogin(action) {
-    const { payload, meta: {formName} } = action;
-    
+    const { payload, meta: {formName, csrfToken} } = action;
     /* Dispatch action to the store to signal that a LOGIN API call has started */
     yield [
       put({
@@ -44,7 +43,7 @@ const login = (apiClient) => {
     let completed;    
     try {
       /* Run the API call (this call is blocking => waits until a response/error has been received) */      
-      const user = yield call(apiClient, POST,  LOGIN_URL, {data: payload})
+      const response = yield call(apiClient, POST,  LOGIN_RESOURCE, {data: payload, csrfToken})
       
       /* On API call success, dispatch a succes action with success information */            
       yield [
@@ -52,7 +51,7 @@ const login = (apiClient) => {
         put(setSubmitSucceeded(formName)), // for form reducer 
         put({
           type: `${LOGIN}_SUCCESS`, 
-          payload: user,
+          payload: response.user,
           meta: {
             date: Date.now(),
             payload,
@@ -61,10 +60,10 @@ const login = (apiClient) => {
       ];  
       completed=true;         
     } catch(error) {
-      /* On API call error, dispatch a failure action with failure information */                  
+      /* On API call error, dispatch a failure action with failure information */
       yield [
-        put(stopSubmit(formName, error ? error.errors : undefined)), // for form reducer
-        put(setSubmitFailed(formName, error && error.errors ? Object.keys(error.errors) : undefined)), // for form reducer
+        put(stopSubmit(formName, error && error.message ? error.message.errors : undefined)), // for form reducer
+        put(setSubmitFailed(formName, error && error.message && error.message.errors ? Object.keys(error.message.errors) : undefined)), // for form reducer
         put({
           type:`${LOGIN}_FAILURE`,
           payload: error,

@@ -3,6 +3,7 @@ import {
   SET_SIDEBAR_VISIBILITY,
   TOGGLE_USER_BOX,
   SET_USER_BOX_VISIBILITY,
+  LOGOUT
 } from '../actions';
 
 const initialState = {
@@ -35,6 +36,9 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         userBoxOpen: payload,
       };
+    
+    case `${LOGOUT}_SUCCESS`:
+      return initialState;
 
     default:
       return state;
