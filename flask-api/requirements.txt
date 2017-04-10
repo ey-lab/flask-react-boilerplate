@@ -1,3 +1,5 @@
+aniso8601==1.2.0
+appdirs==1.4.3
 bcrypt==3.1.2
 blinker==1.4
 cffi==1.9.1
@@ -9,6 +11,7 @@ Flask-Login==0.3.2
 Flask-Mail==0.9.1
 Flask-Moment==0.5.1
 Flask-Principal==0.4.0
+Flask-RESTful==0.3.5
 Flask-Security==1.7.5
 Flask-SocketIO==2.8.2
 Flask-SQLAlchemy==2.1
@@ -19,9 +22,11 @@ itsdangerous==0.24
 Jinja2==2.9.4
 MarkupSafe==0.23
 numpy==1.12.0
+packaging==16.8
 pandas==0.19.2
 passlib==1.7.0
 pycparser==2.17
+pyparsing==2.2.0
 python-dateutil==2.6.0
 python-engineio==1.1.1
 python-socketio==1.6.3
