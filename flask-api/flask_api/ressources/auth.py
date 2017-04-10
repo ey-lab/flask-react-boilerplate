@@ -1,0 +1,109 @@
+import json
+
+from flask import Blueprint, request, after_this_request, jsonify
+from flask_restful import Api, Resource
+from flask_restful.utils.cors import crossdomain
+from flask_security import login_user, logout_user, current_user
+from flask_security.forms import LoginForm
+from flask_wtf.csrf import generate_csrf
+from werkzeug.datastructures import MultiDict
+from werkzeug.exceptions import BadRequest, Unauthorized
+from werkzeug.wrappers import Response
+
+from user import _commit
+
+# Convenient constants
+WEBSITE_DOMAIN = 'http://localhost:3000'
+AUTH_BLUEPRINT_NAME = 'auth'
+AUTH_URL_PREFIX = '/auth'
+LOAD_AUTH_RESSOURCE= '/loadAuth'
+LOGIN_RESSOURCE= '/login'
+LOGOUT_RESSOURCE = '/logout'
+
+UNAUTHORIZED_ERROR_MESSAGE = "User unauthorized to access the requested resource"
+LOGIN_ERROR_MESSAGE = "Invalid provided credentials"
+CSRF_TOKEN_KEY = 'csrfToken'
+
+# Make API
+auth_bp = Blueprint(AUTH_BLUEPRINT_NAME, __name__, url_prefix=AUTH_URL_PREFIX)
+auth_api = Api(auth_bp)
+
+#
+class LoadAuth(Resource):
+    """
+    Resource responsible for authentification loading
+    """
+    @crossdomain(origin=WEBSITE_DOMAIN, credentials=True)
+    def get(self):
+        if not current_user.is_authenticated:
+            # Generate a 401 error response including a csrf token
+            unauth_error = Unauthorized(UNAUTHORIZED_ERROR_MESSAGE)
+            content = {
+                'data': unauth_error.get_body(),
+                CSRF_TOKEN_KEY: generate_csrf(),
+            }
+            return Response(json.dumps(content), unauth_error.code, unauth_error.get_headers())
+        else:
+            return jsonify({
+                'user': {'email': current_user.email},
+                CSRF_TOKEN_KEY: generate_csrf(),
+            })
+
+    # Handles preflight OPTIONS http request
+    @crossdomain(origin=WEBSITE_DOMAIN, methods=['GET'], headers=['content-type'], credentials=True)
+    def options(self):
+        # When cross domain decorator is fired on OPTIONS http request a response is automatically sent
+        # (change param automatic_options to False in order to call the function)
+        pass
+
+
+class Login(Resource):
+    """
+    Resource responsible for login
+    """
+    @crossdomain(origin=WEBSITE_DOMAIN, credentials=True)
+    def post(self):
+        login_form = LoginForm(MultiDict(request.get_json()))
+
+        if login_form.validate_on_submit():
+            login_user(login_form.user, remember=login_form.remember.data)
+            after_this_request(_commit)
+            return jsonify({'user': {'email': login_form.user.email}})
+        login_error = BadRequest(LOGIN_ERROR_MESSAGE)
+        return Response(json.dumps({"errors": login_form.errors, "_error": LOGIN_ERROR_MESSAGE}), login_error.code, login_error.get_headers())
+
+    # Handles preflight OPTIONS http requests
+    # Since a POST request is expected x-csrftoken header must be allowed in order to enable the main request to transmit the csrf token to the server
+    @crossdomain(origin=WEBSITE_DOMAIN, methods=['POST'], headers=['content-type', 'x-csrftoken'], credentials=True)
+    def options(self):
+        # When cross domain decorator is fired on OPTIONS http request a response is automatically sent
+        # (change param automatic_options to False in order to call the function)
+        pass
+
+
+class Logout(Resource):
+    """
+    Resource responsible for logout
+    """
+    @crossdomain(origin=WEBSITE_DOMAIN, credentials=True)
+    def get(self):
+        if current_user.is_authenticated:
+            logout_user()
+            return jsonify({})
+
+        else:
+
+            return Unauthorized(UNAUTHORIZED_ERROR_MESSAGE).get_response()
+
+    # Handles preflight OPTIONS http requests
+    # Since a POST request is expected x-csrftoken header must be allowed in order to transmit csrf token to the server
+    @crossdomain(origin=WEBSITE_DOMAIN, methods=['GET'], headers=['content-type'], credentials=True)
+    def options(self):
+        # When cross domain decorator is fired on OPTIONS http request a response is automatically sent
+        # (change param automatic_options to False in order to call the function)
+        pass
+
+# Add ressources
+auth_api.add_resource(LoadAuth, LOAD_AUTH_RESSOURCE)
+auth_api.add_resource(Login, LOGIN_RESSOURCE)
+auth_api.add_resource(Logout, LOGOUT_RESSOURCE)
