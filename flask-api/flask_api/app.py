@@ -34,8 +34,8 @@ def configure_extensions(app):
         socketio.init_app(app, async_mode=app.config['FLASK_SOCKETIO_ASYNC_MODE'])
 
 def configure_blueprints(app):
-    from .ressources import auth_bp
-    for bp in [auth_bp]:
+    from .ressources import bp_list
+    for bp in bp_list:
         app.register_blueprint(bp)
 
 def configure_logging(app):
