@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+# ORM constants
 ROLE_TABLE_NAME = "roles"
 ROLE_NAME_LENGTH = 15
 ROLE_ADMIN = 0
@@ -39,3 +40,10 @@ USER_STATUS = {
 }
 USER_STATUS = OrderedDict(sorted(USER_STATUS.items()))
 
+# Serializer constants
+ROLE_NAME_KEY = "name"
+
+USER_EMAIL_ADDRESS_KEY = "email"
+USER_LAST_NAME_KEY = "lastName"
+USER_FIRST_NAME_KEY = "firstName"
+USER_USER_NAME_KEY = "userName"

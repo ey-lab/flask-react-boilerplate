@@ -8,6 +8,7 @@ __all__ = [
     'create_app',
 ]
 
+
 def create_app(config_name=None):
     app = Flask(__name__)
 
@@ -18,6 +19,7 @@ def create_app(config_name=None):
     configure_hook(app)
 
     return app
+
 
 def configure_extensions(app):
     # flask-sqlalchemy
@@ -33,10 +35,12 @@ def configure_extensions(app):
     if app.config['EXT_SOCKETIO']:
         socketio.init_app(app, async_mode=app.config['FLASK_SOCKETIO_ASYNC_MODE'])
 
+
 def configure_blueprints(app):
     from .ressources import bp_list
     for bp in bp_list:
         app.register_blueprint(bp)
+
 
 def configure_logging(app):
     import logging
@@ -47,6 +51,7 @@ def configure_logging(app):
         fh.setLevel(logging.INFO)
         fh.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
         app.logger.addHandler(fh)
+
 
 def configure_hook(app):
     from flask import session, request
