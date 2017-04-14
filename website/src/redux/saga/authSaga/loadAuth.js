@@ -32,7 +32,7 @@ const loadAuth = (apiClient) => {
       yield [
         put({
           type: `${LOAD_AUTH}_SUCCESS`, 
-          payload: response.user,
+          payload: response.data,
           meta: {
             date: Date.now(),
             csrfToken: response.csrfToken,

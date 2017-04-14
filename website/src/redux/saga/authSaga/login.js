@@ -51,7 +51,7 @@ const login = (apiClient) => {
         put(setSubmitSucceeded(formName)), // for form reducer 
         put({
           type: `${LOGIN}_SUCCESS`, 
-          payload: response.user,
+          payload: response.data,
           meta: {
             date: Date.now(),
             payload,
