@@ -1,6 +1,6 @@
 from .models import User, Role
 from .helpers import user_datastore, _commit
-from .serializer import user_schema
+from .serializers import user_schema
 
 __all__ = [
     'User',
