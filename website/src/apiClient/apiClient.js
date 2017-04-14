@@ -1,4 +1,5 @@
 export const GET = 'GET';
+export const LOGOUT = 'LOGOUT';
 export const GET_ONE = 'GET_ONE';
 export const POST = 'POST';
 export const CREATE = 'CREATE';
@@ -27,6 +28,11 @@ const apiClient = (apiURL, httpClient) => {
         options.method = 'GET';
         break;
       
+      case LOGOUT:
+        url = `${apiURL}/${resource}`;
+        options.method = 'PUT'
+        break;
+
       case GET_ONE:
         url = `${apiURL}/${resource}/${params.id}`;
         options.method = 'GET';

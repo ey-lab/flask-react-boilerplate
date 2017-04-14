@@ -32,7 +32,8 @@ class SessionCookieConfig:
 class SecurityConfig:
     # Enable protection agains *Cross-site Request Forgery (CSRF)*
     CSRF_ENABLED = True
-    WTF_CSRF_FIELD_NAME= 'csrfToken'
+    WTF_CSRF_FIELD_NAME = 'csrfToken'
+    WTF_CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE']
     SECURITY_PASSWORD_HASH = 'bcrypt'
 
     # Config related to password complexity

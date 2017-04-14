@@ -77,7 +77,7 @@ class Logout(Resource):
     Resource responsible for logout
     """
     @crossdomain(origin=ALLOWED_CROSS_ORIGIN_DOMAIN, credentials=True)
-    def get(self):
+    def put(self):
         if current_user.is_authenticated:
             logout_user()
             return jsonify({})
@@ -88,7 +88,7 @@ class Logout(Resource):
 
     # Handles preflight OPTIONS http requests
     # Since a POST request is expected x-csrftoken header must be allowed in order to transmit csrf token to the server
-    @crossdomain(origin=ALLOWED_CROSS_ORIGIN_DOMAIN, methods=['GET'], headers=['content-type', 'x-csrftoken'], credentials=True)
+    @crossdomain(origin=ALLOWED_CROSS_ORIGIN_DOMAIN, methods=['PUT'], headers=['content-type', 'x-csrftoken'], credentials=True)
     def options(self):
         # When cross domain decorator is fired on OPTIONS http request a response is automatically sent
         # (change param automatic_options to False in order to call the function)

@@ -9,7 +9,7 @@ import {
 } from '../../actions';
 import {
   LOGOUT_RESOURCE,
-  GET,
+  LOGOUT as LOGOUT_TYPE,
 } from '../../../apiClient';
 
 /**
@@ -20,7 +20,7 @@ const Logout = (apiClient) => {
   /**
    * Saga to be run when a LOGOUT action is dispatched
    */
-  function* handleLogout() {
+  function* handleLogout({meta: { csrfToken }}) {
     yield put({
       type: `${LOGOUT}_REQUEST`, 
       meta: {
@@ -32,7 +32,7 @@ const Logout = (apiClient) => {
     /* Dispatch action to the store to signal that a LOGOUT API call has started */
     try {
       /* Run the API call (note that this call is blocking => waits until a response/error has been received) */      
-      yield call(apiClient, GET, LOGOUT_RESOURCE);
+      yield call(apiClient, LOGOUT_TYPE, LOGOUT_RESOURCE, {csrfToken});
 
       /* On API call success, dispatch a succes action with success information */            
       yield [

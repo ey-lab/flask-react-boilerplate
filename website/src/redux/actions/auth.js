@@ -36,6 +36,9 @@ export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 
 /* Logout action creator  */
-export const logout = () => ({
+export const logout = (csrfToken) => ({
   type: LOGOUT,
+  meta: {
+    csrfToken,
+  },
 })

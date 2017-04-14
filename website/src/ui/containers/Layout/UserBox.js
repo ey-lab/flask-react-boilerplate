@@ -68,13 +68,24 @@ UserBoxIcon.contextTypes = {
   muiTheme: PropTypes.object.isRequired,
 };
 
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  open: state.ui.userBoxOpen,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onLogout: (csrfToken) => dispatch(logoutAction(csrfToken)),
+  onRequestChange: (value) => dispatch(setUserBoxVisibility(value)),
+});
+
+const mergeProps = (stateProps, dispatchProps) => ({
+  ...stateProps,
+  ...dispatchProps,
+  onLogout: () => dispatchProps.onLogout(stateProps.auth.csrfToken),
+});
+
 export default connect(
-  (state) => ({
-    auth: state.auth,
-    open: state.ui.userBoxOpen,
-  }),
-  (dispatch) => ({
-    onLogout: () => dispatch(logoutAction()),
-    onRequestChange: (value) => dispatch(setUserBoxVisibility(value)),
-  })
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps
 )(UserBoxIcon);
