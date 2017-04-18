@@ -60,8 +60,8 @@ const prefixedStyles = {};
 
 const Login = (props) => {
   const { handleSubmit, onSubmit, submitting, theme } = props;
-  console.log('Login csrfToken :', props.csrfToken);
-  const muiTheme = getMuiTheme(theme); 
+  
+  const muiTheme = getMuiTheme(theme);
   if (!prefixedStyles.main) {
     const prefix = autoprefixer(muiTheme);
     prefixedStyles.body = prefix(styles.body);
@@ -125,16 +125,15 @@ Login.defaultProps = {
   theme: defaultTheme,
 }
 
+const mapStateToProps = (state) => ({
+  csrfToken: state.auth.csrfToken, 
+});
+
 const enhance = compose(
-  connect(
-    state => ({
-      csrfToken: state.auth.csrfToken,
-    })
-  ),
+  connect(mapStateToProps),
   reduxForm({
     form: "login",
     onSubmit: (values, dispatch, props) => {
-      console.log("Props", props)
       dispatch(login(values, props.form, props.csrfToken))
     },
   })
