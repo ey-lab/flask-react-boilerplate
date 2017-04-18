@@ -3,76 +3,117 @@ import {
   call, 
   cancelled, 
 } from 'redux-saga/effects';
+import { 
+  startSubmit,
+  stopSubmit,
+  setSubmitSucceeded,
+  setSubmitFailed,
+} from 'redux-form';
 import {
-  FETCH_START,
-  FETCH_ERROR,
+  FETCH_REQUEST,
   FETCH_SUCCESS,
+  FETCH_FAILURE,
   FETCH_CANCEL,
 } from '../../actions';
 
 
 const fetch = (apiClient) => {
-  /* Implements the side effect to be followed when a fetch request action is dispatched */
+  /**
+   * Fetch saga to be run on a fetch action
+   * @param {object} action fetch action that triggered the saga (fetch actions contain a sub-attribute resource nested in attribute meta)
+   */
   function* handleFetch(action) {
-    const { type, payload, meta: {fetch: url, ...meta }} = action;
+    const { 
+      type, 
+      payload, 
+      meta: {
+        resource,
+        formName, 
+        csrfToken, 
+        ...meta
+    }} = action;
     
-    /* Dispatch action to the store to signal that a FETCH API call has started */
+    /* Request dispatchs */
     yield [
-      put({ type: FETCH_START }), // general signal coming with every fetch request
-      put({ type: `${type}_REQUEST`, payload, meta }), // relative signal
+      put({ type: FETCH_REQUEST }), // general request dispatch coming with every fetch action
+      put({ 
+        type: `${type}_REQUEST`, 
+        payload, 
+        meta, 
+      }), // relative request dispatch for this particular fetch action
+      formName ? put(startSubmit(formName)) : undefined, // dispatch redux-form START_SUBMIT action
     ];
-
+    let sagaTerminated; // will hold a boolean value indicating wheter the saga has terminated or not
     try {
-      /* Run the API call (this call is blocking => waits until a response/error has been received) */      
-      const response = yield call(apiClient, url, payload, meta.resource);
+      /* Run the API call (this call is blocking) */      
+      const response = yield call(apiClient, type, resource, {data: payload, csrfToken});
+
+      /* On API call success we set the sagaTerminated boolean to true and dispatch success actions with useful information */    
+      sagaTerminated = true;       
       
-     /* On API call success, dispatch a succes action with success information */            
-     yield [
-        put({ type: FETCH_SUCCESS}),
+      yield [
+        formName ? put(stopSubmit(formName)) : undefined, // dispatch redux-form STOP_SUBMIT action
+        formName ? put(setSubmitSucceeded(formName)) : undefined, // dispatch redux-form SET_SUBMIT_SUCCEEDED action
+        put({ type: FETCH_SUCCESS }), // general success dispatch coming with every fetch action
         put({
           type: `${type}_SUCCESS`,
-          payload: response,
+          payload: response.data,
           meta: {
-            ...meta, 
-            fetchUrl: url, 
-            requestPayload: payload, 
-            fetchStatus: FETCH_SUCCESS,
+            resource, 
+            payload,
+            date: Date.now(),            
             csrfToken: response.csrfToken,
+            ...meta,
           },
-        }),
-      ];
+        }),// relative success dispatch for this particular fetch action
+      ]; 
     } catch(error) {
-      /* On API call error, dispatch a failure action with failure information */                  
+      /* On API call error we set the sagaTerminated boolean to false and dispatch failure actions with useful information */     
+      sagaTerminated = true;                          
+      
       yield [
-        put({type: FETCH_ERROR, error}),
+        formName ? put(stopSubmit(
+          formName, 
+          error && error.message ? error.message.errors : undefined
+        )) : undefined, // dispatch redux-form STOP_SUBMIT action
+        formName ? put(setSubmitFailed(
+          formName, 
+          error && error.message && error.message.errors ? Object.keys(error.message.errors) : undefined
+        )) : undefined, // dispatch redux-form SET_SUBMIT_FAILED action
+        put({
+          type: FETCH_FAILURE, 
+          payload: error,
+          error: true,
+        }), // general failure dispatch coming with every fetch action
         put({
           type: `${type}_FAILURE`,
           payload: error,
           error: true,
           meta: {
+            resource, 
+            payload,
+            date: Date.now(),
+            csrfToken: error.message && error.message.csrfToken,
             ...meta, 
-            fetchUrl: url, 
-            requestPayload: payload, 
-            fetchStatus: FETCH_ERROR,
-            csrfToken: error.csrfToken, 
           },
-        }),
+        }), // relative failure dispatch for this particular fetch action
       ];
     } finally {
       /* In case the saga is cancelled before terminating  */                        
-      if (yield cancelled()) {
-        yield [
-          put(FETCH_CANCEL),
-          put({
-            type: `${type}_CANCEL`,
-            meta: {
-              ...meta, 
-              fetchUrl: url, 
-              requestPayload: payload, 
-              fetchStatus: FETCH_CANCEL, 
-            },
-          }),
-        ];
+      if (!sagaTerminated) {
+        if (yield cancelled()) {
+          yield [
+            put(FETCH_CANCEL),
+            put({
+              type: `${type}_CANCEL`,
+              meta: {
+                resource, 
+                payload, 
+                ...meta, 
+              },
+            }),
+          ];
+        }
       }
     }
   };
