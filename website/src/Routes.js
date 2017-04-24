@@ -3,8 +3,8 @@ import {
   IndexRoute,
   Route,
 } from 'react-router';
-
 import HomeIcon from 'material-ui/svg-icons/action/home';
+import VisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off';
 
 import Wrapper from './ui/containers/Wrapper/Wrapper';
 import Login from './ui/containers/Login/Login';
@@ -12,7 +12,6 @@ import Layout from './ui/containers/Layout/Layout';
 import Menu from './ui/containers/Layout/Menu';
 import Home from './ui/containers/Home/Home';
 import NotFound from './ui/containers/NotFound/NotFound';
-
 import {
   AuthRequired,
   UnauthRequired,
@@ -21,7 +20,7 @@ import {
   HOME_ROUTE,
   AUTH,
   LOGIN,
-} from './constants';
+} from './common';
 
 const menuItems = [
   {
@@ -30,9 +29,9 @@ const menuItems = [
     icon: HomeIcon,
   },
   {
-    name: "Nowere",
-    path: '/nowhere',
-    icon: HomeIcon,
+    name: "Nowhere",
+    path: '/no-where',
+    icon: VisibilityOffIcon,
   },
 ];
 

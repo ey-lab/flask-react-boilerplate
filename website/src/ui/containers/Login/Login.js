@@ -59,7 +59,12 @@ const styles = {
 const prefixedStyles = {};
 
 const Login = (props) => {
-  const { handleSubmit, onSubmit, submitting, theme } = props;
+  const { 
+    handleSubmit, 
+    onSubmit, 
+    submitting, 
+    theme 
+  } = props;
   
   const muiTheme = getMuiTheme(theme);
   if (!prefixedStyles.main) {
@@ -131,7 +136,7 @@ const mapStateToProps = (state) => ({
 
 const onSubmit = (values, dispatch, props) => {
   dispatch(login(values, props.form, props.csrfToken))
-}; // when dispatching a LOGIN action it triggers a saga
+}; // when dispatching a LOGIN action it triggers a fetch saga
 
 const enhance = compose(
   connect(mapStateToProps),
