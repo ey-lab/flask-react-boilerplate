@@ -1,14 +1,13 @@
-import createAuthSaga from './authSaga';
-import responseSaga from './responseSaga';
+import createAppSaga from './appSaga';
+
 /**
- * Build the application saga
- * @param {function} apiClient 
+ * Function that run all the sagas to be run
+ * @param {function} APIManager - function that perform API fetch calls
  */
-function createSaga(apiClient) {
+function createSaga(APIManager) {
   function* saga() {
     yield [
-      createAuthSaga(apiClient)(),
-      responseSaga(),
+      createAppSaga(APIManager)(),
     ];
   };
   return saga; 

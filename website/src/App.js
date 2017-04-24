@@ -10,11 +10,11 @@ import {
   syncHistoryWithStore,
 } from 'react-router-redux';
 
-import apiClient from './apiClient';
+import APIManager from './APIManager';
 import createStore from './redux'
 import getRoutes from './Routes';
 
-const store = createStore(apiClient, browserHistory);
+const store = createStore(APIManager, browserHistory);
 
 const history = syncHistoryWithStore(browserHistory, store);
 

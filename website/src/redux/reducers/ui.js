@@ -10,6 +10,7 @@ const initialState = {
   sidebarOpen: true,
   userBoxOpen: false,
 }
+
 /* ui reducer */
 export default (state = initialState, { type, payload }) => {
   switch (type) {

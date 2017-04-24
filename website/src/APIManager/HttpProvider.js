@@ -2,10 +2,11 @@ import HttpError from './HttpError';
 
 /**
  * complete an API call
- * @param {String} url to call
- * @param {Object} options useful for the request
+ * @param {String} url - URL to request
+ * @param {Object} options - Useful options to build the request
  */
-const HttpClient = (url, options={}) => {
+const HttpProvider = (url, options={}) => {
+  
   /* Set request headers */ 
   const requestHeaders = options.headers || new Headers({Accept: 'application/json'});
 
@@ -14,7 +15,6 @@ const HttpClient = (url, options={}) => {
   if (options.csrfToken) {
     requestHeaders.set('X-CSRFToken', options.csrfToken);
   }
-
 
   return (
     fetch(url, {
@@ -25,18 +25,20 @@ const HttpClient = (url, options={}) => {
     })
     .then(response => (
       response.text()
-          .then(text => ({
-            status: response.status,
-            statusText: response.statusText,
-            headers: response.headers,
-            body: text,
-    }))))
+        .then(text => ({
+          status: response.status,
+          statusText: response.statusText,
+          headers: response.headers,
+          body: text,
+          })
+        )
+      )
+    )
     .then(({status, statusText, headers, body}) => {
       let json;
       try {
           json = JSON.parse(body);
       } catch (e) {
-         // not json, no big deal
       }
 
       if (status < 200 || status >= 300) {
@@ -47,4 +49,4 @@ const HttpClient = (url, options={}) => {
   );
 };
 
-export default HttpClient;
+export default HttpProvider;

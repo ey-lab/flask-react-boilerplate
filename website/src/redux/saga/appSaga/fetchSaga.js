@@ -16,22 +16,28 @@ import {
   FETCH_CANCEL,
 } from '../../actions';
 
-
-const fetch = (apiClient) => {
+/**
+ * Fetch Saga creator
+ * @param {function} APIManager - function that perform API fetch calls
+ */
+const createFetchSaga = (APIManager) => {
   /**
    * Fetch saga to be run on a fetch action
-   * @param {object} action fetch action that triggered the saga (fetch actions contain a sub-attribute resource nested in attribute meta)
+   * @param {object} action - fetch action that triggered the saga
    */
-  function* handleFetch(action) {
+  function* fetchSaga(action) {
     const { 
       type, 
       payload, 
       meta: {
+        APIBaseUrl,
         resource,
-        formName, 
+        requestType,
         csrfToken, 
+        formName, 
         ...meta
-    }} = action;
+      }
+    } = action;
     
     /* Request dispatchs */
     yield [
@@ -39,18 +45,32 @@ const fetch = (apiClient) => {
       put({ 
         type: `${type}_REQUEST`, 
         payload, 
-        meta, 
+        meta : {
+          date: Date.now(),
+          ...meta,   
+        }, 
       }), // relative request dispatch for this particular fetch action
       formName ? put(startSubmit(formName)) : undefined, // dispatch redux-form START_SUBMIT action
     ];
+
     let sagaTerminated; // will hold a boolean value indicating wheter the saga has terminated or not
     try {
       /* Run the API call (this call is blocking) */      
-      const response = yield call(apiClient, type, resource, {data: payload, csrfToken});
+      const response = yield call(
+        APIManager, 
+        requestType, 
+        APIBaseUrl,
+        resource, 
+        {
+          data: payload, 
+          csrfToken
+        }
+      );
 
-      /* On API call success we set the sagaTerminated boolean to true and dispatch success actions with useful information */    
+      /* Indicates that the saga terminated */    
       sagaTerminated = true;       
       
+      /* Success dispatch */
       yield [
         formName ? put(stopSubmit(formName)) : undefined, // dispatch redux-form STOP_SUBMIT action
         formName ? put(setSubmitSucceeded(formName)) : undefined, // dispatch redux-form SET_SUBMIT_SUCCEEDED action
@@ -68,9 +88,10 @@ const fetch = (apiClient) => {
         }),// relative success dispatch for this particular fetch action
       ]; 
     } catch(error) {
-      /* On API call error we set the sagaTerminated boolean to false and dispatch failure actions with useful information */     
+      /* Indicates that the saga terminated */     
       sagaTerminated = true;                          
       
+      /* Failure dispatch */
       yield [
         formName ? put(stopSubmit(
           formName, 
@@ -103,7 +124,8 @@ const fetch = (apiClient) => {
       if (!sagaTerminated) {
         if (yield cancelled()) {
           yield [
-            put(FETCH_CANCEL),
+            formName ? put(stopSubmit(formName )) : undefined, 
+            put({ type: FETCH_CANCEL }),
             put({
               type: `${type}_CANCEL`,
               meta: {
@@ -118,7 +140,7 @@ const fetch = (apiClient) => {
     }
   };
 
-  return handleFetch;
+  return fetchSaga;
 };
 
-export default fetch;
+export default createFetchSaga;

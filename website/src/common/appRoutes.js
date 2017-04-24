@@ -1,4 +1,4 @@
-/* Routes */
+/* App routes */
 export const HOME_ROUTE = '/'
 export const AUTH = 'auth'
 export const LOGIN = 'login'

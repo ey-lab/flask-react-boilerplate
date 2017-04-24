@@ -6,8 +6,8 @@ import {
 
 /**
  * Create store functions that take into account the NODE_ENV environment variable
- * @param {function} reducer app reducer
- * @param {Array} middlewares array containing all middlewares to apply 
+ * @param {function} reducer - App reducer
+ * @param {Array} middlewares - Array containing all middlewares to apply 
  */
 function createStore(reducer, middlewares) {
   if (process.env.NODE_ENV === 'development') {
