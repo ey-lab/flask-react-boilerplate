@@ -21,7 +21,9 @@ const styles = {
 const prefixedStyles = {};
 
 const Waiting = (props) => {
-  const { theme } = props;
+  const { 
+    theme 
+  } = props;
   const muiTheme = getMuiTheme(theme);
   
   if (!prefixedStyles.main) {

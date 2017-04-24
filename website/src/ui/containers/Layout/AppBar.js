@@ -7,13 +7,16 @@ import {
 import MuiAppBar from 'material-ui/AppBar';
 
 import { 
-  toggleSidebar as toggleSidebarAction, 
+  toggleSidebar, 
 } from '../../../redux/actions';
 import UserBoxIcon from './UserBox';
 
 
-const AppBar = (props, context) => {
-  const { title, toggleSidebar } = props
+const AppBar = (props) => {
+  const { 
+    title, 
+    toggleSidebar
+  } = props
 
   return (
     <MuiAppBar
@@ -33,8 +36,11 @@ AppBar.propTypes = {
   toggleSidebar: PropTypes.func.isRequired,
 }
 
-export default connect(null,
-  {
-    toggleSidebar: toggleSidebarAction,
-  }
+const mapDispatchToProps = {
+  toggleSidebar,
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
 )(AppBar);

@@ -35,8 +35,10 @@ SideBar.propTypes = {
   children: PropTypes.node,
 }
 
+const mapStateToProps = (state) => ({
+  open: state.ui.sidebarOpen,
+});
+
 export default connect(
-  state => ({
-    open: state.ui.sidebarOpen,
-  })
+  mapStateToProps
 )(SideBar);

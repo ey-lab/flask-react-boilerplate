@@ -1,5 +1,7 @@
 import React from 'react'
-
+import { 
+  connect
+} from 'react-redux';
 import { 
   Card, 
   CardTitle, 
@@ -15,7 +17,11 @@ import {
 
 import logo from './logo.svg';
 
-const Home = () => {
+const Home = (props) => {
+  const {
+    user
+  } = props;
+
   return (
     <Paper zDepth={3}>
       <Card>
@@ -25,14 +31,20 @@ const Home = () => {
           subtitle="React App"
         />
         <CardTitle 
-          title="Welcome to our new amazing app" 
-          subtitle="Love React <3"/>
+          title={`Hey ${user.firstName}`}
+          subtitle="We are glad to welcome you on our Flask-React boilerplate ! :-)"/>
         <CardText>
-          We are very happy to introduce you our new framework ! :)
+          {"Love React + Python <3"}
         </CardText>
       </Card>
     </Paper>
   )
 };
 
-export default Home;
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+})
+
+export default connect(
+  mapStateToProps
+)(Home);

@@ -40,8 +40,10 @@ Menu.propTypes = {
   items: PropTypes.array.isRequired,
 }
 
+const mapStateToProps = (state) => ({
+  open: state.ui.sidebarOpen
+});
+
 export default connect(
-  state => ({
-    open: state.ui.sidebarOpen
-  })
+  mapStateToProps
 )(Menu);

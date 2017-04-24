@@ -1,23 +1,32 @@
-import React from 'react';
+import React, {
+  PropTypes,
+} from 'react';
 import { 
-  connect 
+  connect, 
 } from 'react-redux';
 import { 
-  push 
+  push, 
 } from 'react-router-redux';
 
 import { 
   Card, 
   CardTitle,
   CardText, 
-  CardActions 
+  CardActions, 
 } from 'material-ui/Card';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 
+import {
+  HOME_ROUTE,
+} from '../../../common';
+
 const NotFound = (props) => {
-  const {dispatch} = props;
+  const {
+    onClick,
+  } = props;
+
   return (
     <Paper zDepth={3}>
       <Card>
@@ -31,7 +40,7 @@ const NotFound = (props) => {
           <RaisedButton
             label="Take me home"
             primary
-            onClick={() => dispatch(push('/'))}
+            onClick={onClick}
           />
         </CardActions>
       </Card>
@@ -39,9 +48,15 @@ const NotFound = (props) => {
   )
 };
 
+NotFound.propTypes = {
+  onClick:PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = {
+  onClick: () => push(HOME_ROUTE),
+};
+
 export default connect(
   null,
-  dispatch => ({
-    dispatch,
-  })
+  mapDispatchToProps
 )(NotFound);

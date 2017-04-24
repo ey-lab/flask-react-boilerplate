@@ -129,14 +129,17 @@ const mapStateToProps = (state) => ({
   csrfToken: state.auth.csrfToken, 
 });
 
+const onSubmit = (values, dispatch, props) => {
+  dispatch(login(values, props.form, props.csrfToken))
+}; // when dispatching a LOGIN action it triggers a saga
+
 const enhance = compose(
   connect(mapStateToProps),
   reduxForm({
     form: "login",
-    onSubmit: (values, dispatch, props) => {
-      dispatch(login(values, props.form, props.csrfToken))
-    },
+    onSubmit, 
   })
-)
+);
+
 export default enhance(Login);
 
