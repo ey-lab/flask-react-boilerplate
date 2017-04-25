@@ -34,7 +34,7 @@ auth_api = Api(auth_bp)
 
 class LoadAuth(Resource):
     """
-    Resource responsible for authentification loading
+    Resource responsible for us er authentification loading
     """
     @crossdomain(origin=ALLOWED_CROSS_ORIGIN_DOMAIN, credentials=True)
     def get(self):
@@ -44,8 +44,6 @@ class LoadAuth(Resource):
             content = insert_csrf_token({'data': unauth_error.get_body()})
             return Response(json.dumps(content), unauth_error.code, unauth_error.get_headers())
         else:
-            print(type(user_schema.dump(current_user).data))
-            print(user_schema.dump(current_user).data)
             return jsonify(insert_csrf_token({'data': user_schema.dump(current_user).data}))
 
     # Handles preflight OPTIONS http request
@@ -91,9 +89,7 @@ class Logout(Resource):
         if current_user.is_authenticated:
             logout_user()
             return jsonify({})
-
         else:
-
             return Unauthorized(UNAUTHORIZED_ERROR_MESSAGE).get_response()
 
     # Handles preflight OPTIONS http requests

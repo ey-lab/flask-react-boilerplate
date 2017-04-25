@@ -1,6 +1,7 @@
 from .models import User, Role
 from .helpers import user_datastore, _commit
 from .serializers import user_schema
+from .manager import manager
 
 __all__ = [
     'User',
@@ -8,4 +9,5 @@ __all__ = [
     'user_datastore',
     '_commit',
     'user_schema',
+    'manager',
 ]

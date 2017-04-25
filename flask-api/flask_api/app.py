@@ -8,13 +8,15 @@ __all__ = [
 ]
 
 
-def create_app():
+def create_app(register_blueprints=True):
     app = Flask(__name__)
 
     set_config(app)
     configure_extensions(app)
-    configure_blueprints(app)
-    configure_hook(app)
+
+    if register_blueprints:
+        configure_blueprints(app)
+        configure_hook(app)
 
     return app
 
