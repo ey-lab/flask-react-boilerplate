@@ -6,6 +6,3 @@ security = Security()
 
 from flask_wtf.csrf import CSRFProtect
 csrf = CSRFProtect()
-
-from flask_socketio import SocketIO
-socketio = SocketIO()

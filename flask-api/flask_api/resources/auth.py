@@ -11,13 +11,23 @@ from werkzeug.wrappers import Response
 
 from ..user import _commit, user_schema
 
-from ..common import AUTH_BLUEPRINT_NAME, AUTH_URL_PREFIX, ALLOWED_CROSS_ORIGIN_DOMAIN, \
-    LOAD_AUTH_RESOURCE, LOGIN_RESOURCE, LOGOUT_RESOURCE, \
-    UNAUTHORIZED_ERROR_MESSAGE, LOGIN_ERROR_MESSAGE
+from ..common import ALLOWED_CROSS_ORIGIN_DOMAIN
 
 from ..common.utils import insert_csrf_token
 
+# Convenient constants
+# Resources
+AUTH_URL_PREFIX = '/auth'
+LOAD_AUTH_RESOURCE = '/loadAuth'
+LOGIN_RESOURCE = '/login'
+LOGOUT_RESOURCE = '/logout'
+
+# Messages
+UNAUTHORIZED_ERROR_MESSAGE = "User unauthorized to access the requested resource"
+LOGIN_ERROR_MESSAGE = "Invalid provided credentials"
+
 # Make auth API
+AUTH_BLUEPRINT_NAME = 'auth'
 auth_bp = Blueprint(AUTH_BLUEPRINT_NAME, __name__, url_prefix=AUTH_URL_PREFIX)
 auth_api = Api(auth_bp)
 
@@ -57,7 +67,7 @@ class Login(Resource):
         if login_form.validate_on_submit():
             login_user(login_form.user, remember=login_form.remember.data)
             after_this_request(_commit)
-            return jsonify(user_schema.dump(current_user).data)
+            return jsonify({'data': user_schema.dump(current_user).data})
 
         # login failed
         login_error = BadRequest(LOGIN_ERROR_MESSAGE)

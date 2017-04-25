@@ -9,14 +9,4 @@ ALLOWED_CROSS_ORIGIN_DOMAIN = [
     'http://localhost:3000',
 ]
 
-# Auth resource constants
-# Patch of the API
-AUTH_BLUEPRINT_NAME = 'auth'
-AUTH_URL_PREFIX = '/auth'
-LOAD_AUTH_RESOURCE= '/loadAuth'
-LOGIN_RESOURCE= '/login'
-LOGOUT_RESOURCE = '/logout'
 
-# MESSAGES
-UNAUTHORIZED_ERROR_MESSAGE = "User unauthorized to access the requested resource"
-LOGIN_ERROR_MESSAGE = "Invalid provided credentials"
