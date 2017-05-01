@@ -1,3 +1,88 @@
+# React-SPA
+This project aims to build a Single Page Application that properly retrieve data by fecthing some REST API. It uses [React](https://github.com/facebook/react) as main underlying technology. Choosing React can be argued by multiple reasons, main ones being
+ - React is an high performing Front End library
+ - React makes no assumptions on the rest of your stack. In particular it can be easily combined with any Back End technology
+ - React is Component-Based so it allows to write very clear and predictable code (this is even more true when using Redux)
+ - React is very popular and the community is very active, making it very straight forward to skill up on
+
+## Table of Contents
+1. [Packages](#Packages)
+2. [Getting Started](#getting-started)
+3. [Application Structure](#application-structure)
+4. [Implementation](#implementation)
+5. [Testing](#testing)
+6. [Deployment](#deployment)
+
+## Packages
+This project covers most of what we believe as being the best React libraries
+ - [Create-React-App](https://github.com/facebookincubator/create-react-app) - Facebook project intended to easily package React Applications
+ - [Redux](https://github.com/reactjs/redux) - Very popular package that allows proper Application State management
+ - [React-Router](https://github.com/ReactTraining/react-router) - Package that allows to dynamically manage Applications Route
+ - [Redux-Saga](https://github.com/redux-saga/redux-saga) - Package that properly handles side effects (e.g. asynchronous fetch calls)
+ - [Redux-Form](https://github.com/erikras/redux-form) - Package that allows to easily synchonize forms and Redux state
+ - [Material-UI](https://github.com/callemall/material-ui) - Library of  React components that implements *Google Material Design* specification
+
+## Getting Started
+
+### Requirements
+***TODO : to be completed***
+
+### Installation
+You can get all scripts from this project by cloning the Github repository
+```bash
+$ git clone
+$ cd
+```
+Once the repository is cloned you only need to install all the dependencies for this project
+```bash
+$ npm install
+```
+You are ready go !
+
+### Running
+***TODO : to be completed***
+
+## Application Structure
+The application structure is inspired from [fbone](https://github.com/imwilsonxu/fbone)
+```
+.
+├── config                   # Flask configuration module
+│   ├── __init__.py          # Manage exports
+│   ├── cfg.py               # Flask and Flask extensions configurations
+│   └── secret_generator.py  # Secret keys file generator
+├── flask_api                # Application source code
+│   ├── resources            # API Resources implementation
+│   │   │── __init__.py      # Manage exports
+│   │   └── auth.py          # Main file for layout
+│   ├── user                 # User module that allow to access users' information
+│   │   ├── __init__.py      # Manage exports
+│   │   ├── models.py        # SQLAlchemy models (User, Role)
+│   │   ├── helpers.py       # Convenient functions to manipulate SQLAlchemy models
+│   │   ├── serializers.py   # Marshmallow schema to serialize User SQLAlchemy objects
+│   │   ├── manager.py       # Flask-Script CLI commands to manipulate User database
+│   │   └── constants.py     # Set of convenient constants
+│   ├── common               # Set of elements useful for the whole application
+│   │   ├── __init__.py      # Manage exports
+│   │   ├── utils.py         # Functions that  every-where in the application
+│   │   └── constants.py     # Set of convenient constants
+│   ├── __init__.py          # Main HTML page container for app
+│   ├── app.py               # Functions that allow App instantiation
+│   ├── decorators.py        # Set of useful decorators
+│   └── extensions.py        # Instantiate flask extensions ()
+├── run.py                   # Script that run the application
+└── manage.py                # Flask-Script CLI commands to manipulate initialize databases
+```
+
+## Implementation
+***TODO : to be completed***
+
+## Testing
+***TODO : to be completed and implemented***
+
+## Deployment
+***TODO : to be completed***
+
+# 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
